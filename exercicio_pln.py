@@ -11,7 +11,6 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import RSLPStemmer
 
-# Suponha que você tenha uma lista de revisões e seus respectivos sentimentos
 reviews = ["Eu amo este produto", "Este é o pior produto que já comprei", "Este produto é ok", 
            "Eu não compraria este produto novamente", "Este produto é incrível", 
            "Eu não gostei deste produto", "Eu compraria este produto novamente", 
