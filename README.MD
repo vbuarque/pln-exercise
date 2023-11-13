@@ -15,7 +15,7 @@
 
 ### a) O modelo deve operar sobre dados de revisão que tenham sido pré-processados;
 <br />
-O pré-processamento dos dados é feito na função `preprocess(review)`. Esta função tokeniza as revisões, remove palavras irrelevantes (stop words) e aplica a lematização nas palavras restantes usando o algoritmo RSLPStemmer.
+O pré-processamento dos dados é feito na função preprocess(review). Esta função tokeniza as revisões, remove palavras irrelevantes (stop words) e aplica a lematização nas palavras restantes usando o algoritmo RSLPStemmer.
 
 
 ```python
@@ -92,6 +92,79 @@ print(df)
 
 O modelo Word2Vec teve um desempenho melhor que o modelo Bag of Words, com uma precisão de 51.11% contra 37.78%. Isso sugere que o modelo Word2Vec pode ser mais adequado para essa tarefa específica. No entanto, a precisão ainda é relativamente baixa, o que sugere que pode haver espaço para melhorias no pré-processamento dos dados, na escolha do modelo ou nos parâmetros do mesmo, porém por conta de limitações relacionadas ao hardware este foi o resultado possível até o momento.
 
+# Exercício 02:
+
+<img src="https://github.com/bruno-pisciotta281/pln_ex/blob/main/exercicio%2002.PNG" width="500px;"/>
+
+## Código:
+
+```bash
+
+import pandas as pd
+import gensim.downloader as api
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+
+nltk.download('punkt')
+
+# Carregue um modelo Word2Vec
+word2vec_model = api.load('glove-wiki-gigaword-100')
+
+# Função para encontrar sinônimos com base na similaridade do Word2Vec
+def find_synonym(word, word2vec_model):
+    try:
+        synonyms = word2vec_model.most_similar(positive=[word], topn=5)
+        return synonyms[0][0]  # Escolha o sinônimo mais similar
+    except KeyError:
+        return word
+
+# Função para reescrever a frase do usuário
+def rewrite_sentence(sentence, word2vec_model):
+    words = word_tokenize(sentence)
+    rewritten_sentence = []
+    
+    for word in words:
+        # Verifique se a palavra não é uma stop word e possui sinônimos no modelo Word2Vec
+        if word not in stopwords.words('english') and word in word2vec_model.key_to_index:
+            synonym = find_synonym(word, word2vec_model)
+            rewritten_sentence.append(synonym)
+        else:
+            rewritten_sentence.append(word)
+    
+    return ' '.join(rewritten_sentence)
+
+# Carregar os dados
+data = pd.read_csv('bd\data.csv')
+
+# Pegue uma amostra dos dados
+sample_data = data.head(10)
+
+# Reescreva cada revisão na amostra de dados
+rewritten_reviews = sample_data['Sentence'].apply(lambda x: rewrite_sentence(x, word2vec_model))
+
+# Adicione as revisões reescritas ao DataFrame
+sample_data['Rewritten_Sentence'] = rewritten_reviews
+
+print(sample_data)
+
+```
+
+## Resultado Exercício 02:
+
+<img src="https://github.com/bruno-pisciotta281/pln_ex/blob/main/resultadoex02.PNG" width="500px;"/>
+
+## Conclusão ex02:
+
+A base de dados utilizada para treinamento e substituição das palavras pode afetar o desempenho do sistema.
+
+Se o corpus de treinamento é grande e diversificado, o modelo pode aprender uma ampla gama de sinônimos para várias palavras, melhorando o desempenho. No entanto, se o corpus de treinamento é limitado ou enviesado, o modelo pode não aprender relações significativas entre as palavras, o que pode prejudicar o desempenho.
+
+No caso a a base de dados utilizada para o treinamento é o modelo Word2Vec pré-treinado ‘glove-wiki-gigaword-100’, que foi treinado em um grande corpus de texto da Wikipedia e da Gigaword. A qualidade e a diversidade do corpus de treinamento (Wikipedia e Gigaword) podem ter ajudado o modelo a aprender uma ampla gama de sinônimos para várias palavras, melhorando o desempenho. No entanto, se muitas das palavras na base de dados (Financial Sentiment Analysis - Mostrada anteriormente) não estiverem presentes no vocabulário do modelo Word2Vec, o sistema pode não ter sido capaz de encontrar sinônimos para essas palavras, o que pode ter afetado o desempenho.
+
+Portanto, a escolha da base de dados para treinamento e substituição das palavras é um fator importante que pode afetar o desempenho do sistema, no caso deste exercício, foi a base possível de ser trabalhada, levando em conta as limitações de Hardware e disponiblidade quanto aos requsitos. 
+
+
 ## Como rodar o projeto
 
 1. Clone este repositório para a sua máquina local usando `git clone https://github.com/vbuarque/pln-exercise`.
@@ -100,7 +173,7 @@ O modelo Word2Vec teve um desempenho melhor que o modelo Bag of Words, com uma p
 
 3. Instale as bibliotecas necessárias usando o comando `pip install -r requirements.txt`.
 
-4. Execute o script Python usando o comando `python ex01.py`.
+4. Execute o script Python usando o comando `python ex01.py` ou `python ex02.py`.
 
 
 <p align="right"><a href="#topo">Voltar ao Topo</p> 
