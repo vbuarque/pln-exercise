@@ -11,10 +11,11 @@
 
 <img src="https://github.com/bruno-pisciotta281/pln_ex/blob/main/exercicio%2001.PNG" width="500px;"/>
 
-# PP.4.1. Construa um modelo do tipo word2vec (W2V) para classificação de revisões de produto que atenda aos seguintes critérios:
+## PP.4.1. Construa um modelo do tipo word2vec (W2V) para classificação de revisões de produto que atenda aos seguintes critérios:
 
-a) O modelo deve operar sobre dados de revisão que tenham sido pré-processados;
-O pré-processamento dos dados é feito na função preprocess(review). Esta função tokeniza as revisões, remove palavras irrelevantes (stop words) e aplica a lematização nas palavras restantes usando o algoritmo RSLPStemmer.
+### a) O modelo deve operar sobre dados de revisão que tenham sido pré-processados;
+<br />
+O pré-processamento dos dados é feito na função `preprocess(review)`. Esta função tokeniza as revisões, remove palavras irrelevantes (stop words) e aplica a lematização nas palavras restantes usando o algoritmo RSLPStemmer.
 
 
 ```python
@@ -27,7 +28,8 @@ def preprocess(review):
 processed_reviews = [preprocess(review) for review in reviews]
 ```
 
-b) O modelo deve ser comparado, em termos de desempenho de classificação, com um modelo clássico do tipo bag of words (BOW) com transformação TFIDF.
+### b) O modelo deve ser comparado, em termos de desempenho de classificação, com um modelo clássico do tipo bag of words (BOW) com transformação TFIDF.
+<br />
 A comparação entre o modelo Word2Vec e o modelo Bag of Words é feita na parte final do código. Ambos os modelos são treinados e suas previsões são comparadas.
 
 ```python
@@ -39,7 +41,8 @@ w2v_prob_mean = np.mean(w2v_predictions == validation_sentiments)
 bow_prob_mean = np.mean(bow_predictions == validation_sentiments)
 ```
 
-c) Para a classificação, utilizar no mínimo 15 reviews de treinamento, classificador utilizando Multilayer Perceptron e mais 45 reviews de validação, sendo elas igualmente distribuídas entre revisões positivas, negativas e neutras.
+### c) Para a classificação, utilizar no mínimo 15 reviews de treinamento, classificador utilizando Multilayer Perceptron e mais 45 reviews de validação, sendo elas igualmente distribuídas entre revisões positivas, negativas e neutras.
+<br/>
 A divisão dos dados em conjuntos de treinamento e validação é feita da seguinte forma:
 
 ```python
@@ -65,7 +68,7 @@ bow_predictions = mlp.predict(validation_vectors)
 
 ```
 
-Crie uma tabela comparativa entre o BOW e W2V que mostre: O percentual de acerto das reviews e a probabilidade média relacionada aos acertos.
+### Crie uma tabela comparativa entre o BOW e W2V que mostre: O percentual de acerto das reviews e a probabilidade média relacionada aos acertos.
 
 A tabela comparativa é criada e impressa no console no final do código.
 
